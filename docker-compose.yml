@@ -15,7 +15,6 @@ services:
     volumes:
       - wordpress:/var/www/html
       - ./testplugin:/var/www/html/wp-content/plugins/testplugin
-      - ./coyote-wp:/var/www/html/wp-content/plugins/coyote-wp
  
   db:
     image: mysql:5.7
