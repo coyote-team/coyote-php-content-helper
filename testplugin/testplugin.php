@@ -1,4 +1,5 @@
 <?php
+require 'TestDomModule.php';
 
 /*
 Plugin Name: DOM module test
