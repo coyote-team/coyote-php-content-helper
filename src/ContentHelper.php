@@ -2,24 +2,13 @@
 
 declare(strict_types=1);
 
-
-
-use PHPUnit\Framework\TestCase;
-
-class TestDOMModule extends TestCase
+class ContentHelper
 {
-    $contents;
-	$dom;
-
-    public function setUp(): void 
-    {
-        $this->contents = file_get_contents(path_join(plugin_dir_path(__FILE__), 'arngren_net.html'));
-        $this->$dom = new DOMDocument();
-    }
-
     public function get_images(string $html): DOMNOdeList
     {
-        $images = $html->getElementsByTagName('img');
+        $dom = new DOMDocument();
+        $dom->loadHTML($html);
+        $images = $dom->getElementsByTagName('img');
         return $images;
     }
 
@@ -32,22 +21,14 @@ class TestDOMModule extends TestCase
         return $attr;
     }
 
-    set_image_alt(DOMElement $element, string $alt): DOMElement
+    public function set_image_alt(DOMElement $element, string $alt): DOMElement
     {
-        $element->setAttribute('alt',$alt)
-        return $element;
+        $attr=$element->getAttribute('alt');
+        $newelement = $element->setAttribute('alt',$alt);
+        return $newelement;
     }
 
-    get_image_src(DOMElement $element): ?string
-    {
-        $src = $element->getAttribute('src');
-        if($src = ''){
-            return null;
-        }
-        return $src;
-    }
-
-    set_image_src(DOMElement $element): ?string
+    public function get_image_src(DOMElement $element): ?string
     {
         $src = $element->getAttribute('src');
         if($src = ''){
@@ -56,7 +37,16 @@ class TestDOMModule extends TestCase
         return $src;
     }
 
-    set_image_alts(string $html, $map[]<string => string>): string
+    public function set_image_src(DOMElement $element): ?string
+    {
+        $src = $element->getAttribute('src');
+        if($src = ''){
+            return null;
+        }
+        return $src;
+    }
+
+    public function set_image_alts(string $html, $map): string
     {
         $images = get_images($html);
         $element; 
