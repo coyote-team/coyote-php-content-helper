@@ -5,16 +5,6 @@ declare(strict_types=1);
 class ContentHelper
 {
 
-    protected string $contents;
-    protected DOMDocument $dom;
-
-    public function __construct()
-    {
-        $contents = file_get_contents(path_join(plugin_dir_path(__FILE__), 'arngren_net.html'));
-        $dom = new DOMDocument();
-        $dom->loadHTML($contents);
-    }
-
     /*
         Given a html string, either an entire or partial document, return all image elements (these can be DOMElement instances)
     */
@@ -50,7 +40,6 @@ class ContentHelper
     */
     public function set_image_alt(DOMElement $element, string $alt): DOMElement
     {
-        $attr=$element->getAttribute('alt');
         $newelement = $element->setAttribute('alt',$alt);
         return $newelement;
     }
@@ -66,14 +55,14 @@ class ContentHelper
         }
         return $src;
     }
-
-    public function set_image_src(DOMElement $element): ?string
+    
+    /*
+        Given an image DOMElement node and a string, set its src attribute value. Be careful of data sanitation.
+    */
+    public function set_image_src(DOMElement $element, string $src): ?string
     {
-        $src = $element->getAttribute('src');
-        if($src = ''){
-            return null;
-        }
-        return $src;
+        $newelement = $element->setAttribute('src',$src);
+        return $newelement;
     }
 
     /*
