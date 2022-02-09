@@ -8,10 +8,15 @@ class ContentHelper
     /*
         Given a html string, either an entire or partial document, return all image elements (these can be DOMElement instances)
     */
-    public function get_images(string $html): DOMNOdeList
+    public function get_images(string $html)
     {
         $dom->loadHTML($html);
         $images = $dom->getElementsByTagName('img');
+
+        foreach($images as $image){
+
+        }
+
         return $images;
     }
 
@@ -118,5 +123,19 @@ class ContentHelper
         return '//teststring';
     }
 
+
+}
+
+class Image {
+    public readonly string $src;
+    public readonly ?string $alt;
+    public readonly ?string $caption;
+
+    public function __construct(string $src, string $alt, string $caption)
+    {
+        $this->src = $src;
+        $this->alt = $alt;
+        $this->caption = $caption;
+    }
 
 }
