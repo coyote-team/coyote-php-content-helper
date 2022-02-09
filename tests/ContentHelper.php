@@ -26,7 +26,9 @@ class ContentHelper
             $alt = $image->getAttribute('alt');
             $class = $image->getAttribute('class');
             $contentImage = new Image($src,$alt,'',$class);
-            array_push($imageObjects, $contentImage);
+            if($src){
+                array_push($imageObjects, $contentImage);
+            }
         }
 
         return $imageObjects;

@@ -28,13 +28,17 @@ class TestContentHelper extends TestCase
 
     }
 
-    public function testgetImagesSrc(){
+    public function testSetImagesSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
         $src = $images[0]->src;
         $this->assertEquals($src, 'foo.jpg');
     }
 
-
+    public function testIgnoreNoSrcImage(){
+        $helper = new ContentHelper("<img>");
+        $images = $helper->get_images();
+        $this->assertCount(0, $images);
+    }
 
 }
