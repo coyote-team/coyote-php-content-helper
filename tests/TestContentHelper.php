@@ -11,7 +11,7 @@ class TestContentHelper extends TestCase
 
     public function setUp(): void
     {
-        $contents = file_get_contents(path_join(plugin_dir_path(__FILE__), 'arngren_net.html'));
+        $contents = file_get_contents(join(DIRECTORY_SEPARATOR, [getcwd(), 'arngren_net.html']));
         $doc = new DOMDocument();
     }
 
