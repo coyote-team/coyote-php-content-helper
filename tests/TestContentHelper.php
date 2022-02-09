@@ -21,11 +21,20 @@ class TestContentHelper extends TestCase
         $this->assertInstanceOf(ContentHelper::class, $helper);
     }
 
-    public function testgetImages(){
+    public function testGetImages(){
+        $helper = new ContentHelper("<img src='foo.jpg'>");
+        $images = $helper->get_images();
+        $this->assertCount(1, $images);
+
+    }
+
+    public function testgetImagesSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
         $src = $images[0]->src;
         $this->assertEquals($src, 'foo.jpg');
     }
+
+
 
 }
