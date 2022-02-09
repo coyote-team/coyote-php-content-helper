@@ -28,7 +28,7 @@ class TestContentHelper extends TestCase
 
     }
 
-    public function testSetImagesSrc(){
+    public function testGetImagesSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
         $src = $images[0]->src;
