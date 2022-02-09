@@ -5,19 +5,31 @@ declare(strict_types=1);
 class ContentHelper
 {
 
+    public ?string $html;
+
+
+    public function __construct(string $html){
+        $this->html = $html;
+    }
+
     /*
         Given a html string, either an entire or partial document, return all image elements (these can be DOMElement instances)
     */
-    public function get_images(string $html)
+    public function get_images()
     {
-        $dom->loadHTML($html);
+        $dom = new DOMDocument();
+        $dom->loadHTML($this->html);
         $images = $dom->getElementsByTagName('img');
-
+        $imageObjects = [];
         foreach($images as $image){
-
+            $src = $image->getAttribute('src');
+            $alt = $image->getAttribute('alt');
+            $class = $image->getAttribute('class');
+            $contentImage = new Image($src,$alt,'',$class);
+            array_push($imageObjects, $contentImage);
         }
 
-        return $images;
+        return $imageObjects;
     }
 
     /*
@@ -130,12 +142,14 @@ class Image {
     public readonly string $src;
     public readonly ?string $alt;
     public readonly ?string $caption;
+    public readonly ?string $class;
 
-    public function __construct(string $src, string $alt, string $caption)
+    public function __construct(string $src, string $alt, string $caption, string $class)
     {
         $this->src = $src;
         $this->alt = $alt;
         $this->caption = $caption;
+        $this->class = $class;
     }
 
 }
