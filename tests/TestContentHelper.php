@@ -7,14 +7,14 @@ require_once('vendor/autoload.php');
 
 class TestContentHelper extends TestCase
 {
-    protected string $contents;
-    protected DOMDocument $doc;
+    // protected string $contents;
+    // protected DOMDocument $doc;
 
-    public function setUp(): void
-    {
-        $contents = file_get_contents(join(DIRECTORY_SEPARATOR, [getcwd(), 'arngren_net.html']));
-        $doc = new DOMDocument();
-    }
+    // public function setUp(): void
+    // {
+    //     $contents = file_get_contents(join(DIRECTORY_SEPARATOR, [getcwd(), 'arngren_net.html']));
+    //     $doc = new DOMDocument();
+    // }
 
     public function testCreateContentHelper(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
@@ -69,6 +69,18 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt1, 'one');
         $this->assertEquals($alt2, 'two');
         $this->assertEquals($alt3, '');
+    }
+
+    public function testNoSrcInHTMLMatchingMapSrc(){
+        $helper = new ContentHelper("<img src='foo.jpg'>");
+        $map = ['fo.jpg' => 'one', 'bo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
+        
+        $newText = $helper->set_image_alts($map);
+        $newHelper = new ContentHelper($newText);
+        
+        $images = $newHelper->get_images();
+        
+        $this->assertCount(1, $images);
     }
 
 }
