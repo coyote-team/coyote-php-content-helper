@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-include 'ContentHelper.php';
+require_once('vendor/autoload.php');
 
 
 class TestContentHelper extends TestCase
@@ -33,6 +33,18 @@ class TestContentHelper extends TestCase
         $images = $helper->get_images();
         $src = $images[0]->src;
         $this->assertEquals($src, 'foo.jpg');
+    }
+
+    public function testNoImagesAtAll(){
+        $helper = new ContentHelper("<html></html>");
+        $images = $helper->get_images();
+        $this->assertCount(0, $images);
+    }
+
+    public function testReturnsImageInstanceArray(){
+        $helper = new ContentHelper("<img src='foo.jpg'>");
+        $images = $helper->get_images();
+        $this->assertInstanceOf(ContentHelper\Image::class, array_pop($images));
     }
 
     public function testIgnoreNoSrcImage(){

@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use ContentHelper\Image;
 
 class ContentHelper
 {
@@ -40,14 +41,15 @@ class ContentHelper
         and a map of image sources and their alt attributes, 
         set the alt text for each image and return the modified html
     */
-    public function set_image_alts(string $html, $map): string
+    public function set_image_alts($map): string
     {
         
-        $images = get_images($html);
-        $image_count = count($images);
+        $images = get_images($this->html);
 
         foreach($images as $image){
             if($map->get($this->get_image_src($image) !== null)){
+                $image->removeAttribute('alt');
+                $image->setAttribute('alt', $map->get($this->get_image_src($image)));
                 
             }
         }
@@ -68,21 +70,5 @@ class ContentHelper
         return '//teststring';
     }
 
-
-}
-
-class Image {
-    public readonly string $src;
-    public readonly ?string $alt;
-    public readonly ?string $caption;
-    public readonly ?string $class;
-
-    public function __construct(string $src, string $alt, string $caption, string $class)
-    {
-        $this->src = $src;
-        $this->alt = $alt;
-        $this->caption = $caption;
-        $this->class = $class;
-    }
 
 }
