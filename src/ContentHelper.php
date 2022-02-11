@@ -67,15 +67,4 @@ class ContentHelper
 
 
 
-
-    /**
-     * @param int $attachment_id
-     * @return string
-     */
-    function coyote_attachment_url($attachment_id) {
-
-        return '//teststring';
-    }
-
-
 }
