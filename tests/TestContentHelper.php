@@ -20,6 +20,12 @@ class TestContentHelper extends TestCase
 
     }
 
+    public function testIgnoreNoSrcImage(){
+        $helper = new ContentHelper("<img>");
+        $images = $helper->get_images();
+        $this->assertCount(0, $images);
+    }
+
     public function testGetImagesSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
@@ -39,11 +45,7 @@ class TestContentHelper extends TestCase
         $this->assertInstanceOf(ContentHelper\Image::class, array_pop($images));
     }
 
-    public function testIgnoreNoSrcImage(){
-        $helper = new ContentHelper("<img>");
-        $images = $helper->get_images();
-        $this->assertCount(0, $images);
-    }
+
 
     public function testSetAltWithMap(){
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img src='notthere.jpg'>");
