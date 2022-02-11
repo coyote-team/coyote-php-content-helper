@@ -83,4 +83,22 @@ class TestContentHelper extends TestCase
         $this->assertCount(1, $images);
     }
 
+    public function testChangeAltFromCurrentWithMap(){
+        $helper = new ContentHelper("<img src='foo.jpg' alt='three'><img src='boo.jpg' alt='four'><img src='notthere.jpg' alt='five'>");
+        $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
+        
+        $newText = $helper->set_image_alts($map);
+        $newHelper = new ContentHelper($newText);
+        
+        $images = $newHelper->get_images();
+        
+        $alt1 = $images[0]->alt;
+        $alt2 = $images[1]->alt;
+        $alt3 = $images[2]->alt;
+
+        $this->assertEquals($alt1, 'one');
+        $this->assertEquals($alt2, 'two');
+        $this->assertEquals($alt3, 'five');
+    }
+
 }
