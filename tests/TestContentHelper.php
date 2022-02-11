@@ -54,7 +54,7 @@ class TestContentHelper extends TestCase
     }
 
     public function testSetAltWithMap(){
-        $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img>");
+        $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img src='notthere.jpg'>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
         $newText = $helper->set_image_alts($map);

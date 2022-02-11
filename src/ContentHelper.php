@@ -6,7 +6,7 @@ use ContentHelper\Image;
 class ContentHelper
 {
 
-    public DOMDocument $dom;
+    private DOMDocument $dom;
 
     public function __construct(string $html){
         $this->dom = new DOMDocument;
@@ -43,17 +43,24 @@ class ContentHelper
     public function set_image_alts($map): string
     {
         
-        
-        
+        $xpath = new DOMXPath($this->dom);
 
-        foreach($map as $key -> $value){
-            if(null !== 1){
-                $image->removeAttribute('alt');
-                $image->setAttribute('alt', $map->get($this->get_image_src($image)));
-                
+        foreach($map as $src => $alt){
+            $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
+            if(is_null($images) || $images === false){
+                continue;
             }
+            
+            foreach($images as $image){
+                $image->removeAttribute('alt');
+                $image->setAttribute('alt', $alt);
+            }
+
         }
-        
+
+        $html = $this->dom->saveHTML();
+
+        return $html;
         
         
     }
