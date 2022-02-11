@@ -6,11 +6,11 @@ use ContentHelper\Image;
 class ContentHelper
 {
 
-    public ?string $html;
-
+    public DOMDocument $dom;
 
     public function __construct(string $html){
-        $this->html = $html;
+        $this->dom = new DOMDocument;
+        $this->dom->loadHTML($html);
     }
 
     /*
@@ -18,9 +18,8 @@ class ContentHelper
     */
     public function get_images()
     {
-        $dom = new DOMDocument();
-        $dom->loadHTML($this->html);
-        $images = $dom->getElementsByTagName('img');
+        
+        $images = $this->dom->getElementsByTagName('img');
         $imageObjects = [];
         foreach($images as $image){
             $src = $image->getAttribute('src');
@@ -44,10 +43,11 @@ class ContentHelper
     public function set_image_alts($map): string
     {
         
-        $images = get_images($this->html);
+        
+        
 
-        foreach($images as $image){
-            if($map->get($this->get_image_src($image) !== null)){
+        foreach($map as $key -> $value){
+            if(null !== 1){
                 $image->removeAttribute('alt');
                 $image->setAttribute('alt', $map->get($this->get_image_src($image)));
                 
