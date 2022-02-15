@@ -38,6 +38,12 @@ class TestContentHelper extends TestCase
         $this->assertEquals($images[0]->alt, 'test');
     }
 
+    public function testGetEmptyAltAttributeForSrc(){
+        $helper = new ContentHelper("<img src='foo.jpg'>");
+        $images = $helper->get_images_with_src('foo.jpg');
+        $this->assertEquals($images[0]->alt, '');
+    }
+
     public function testGetClassAttributeForSrc(){
         $helper = new ContentHelper("<img src='foo.jpg' class='testing'>");
         $images = $helper->get_images_with_src('foo.jpg');
