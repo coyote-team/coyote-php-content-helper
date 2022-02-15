@@ -138,4 +138,19 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt1, 'test');
         $this->assertEquals($alt2, 'test');
     }
+
+    public function testNoChangeForSingleAltWithMultipleSrcs(){
+        $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img src='foo.jpg'>");
+
+        $newHtml = $helper->set_image_alt("hi.jpg", "test");
+        $newHelper = new ContentHelper($newHtml);
+
+        $images = $newHelper->get_images();
+
+        $alt1 = $images[0]->alt;
+        $alt2 = $images[2]->alt;
+
+        $this->assertEquals($alt1, '');
+        $this->assertEquals($alt2, '');
+    }
 }
