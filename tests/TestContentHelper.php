@@ -50,7 +50,13 @@ class TestContentHelper extends TestCase
         $this->assertEquals($images[0]->class, 'testing');
     }
 
-    public function testGetImagesSrc(){
+    public function testGetEmptyClassAttributeForSrc(){
+        $helper = new ContentHelper("<img src='foo.jpg'>");
+        $images = $helper->get_images_with_src('foo.jpg');
+        $this->assertEquals($images[0]->class, '');
+    }
+
+    public function testGetImagesWithSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
         $src = $images[0]->src;
