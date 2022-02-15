@@ -53,6 +53,8 @@ class ContentHelper
         return $imageObjects;
     }
 
+    
+
     public function set_image_alt(string $src, string $alt): string
     {
         
