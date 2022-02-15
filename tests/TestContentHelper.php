@@ -111,7 +111,7 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt3, 'five');
     }
 
-    public function testAddingChangingSingleAlt(){
+    public function testChangingSingleAltWithOneSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'>");
 
         $newHtml = $helper->set_image_alt("foo.jpg", "test");
