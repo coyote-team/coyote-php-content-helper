@@ -34,7 +34,27 @@ class ContentHelper
         return $imageObjects;
     }
 
-    public function set_image_alt(string $src, string $alt): string{
+    public function get_images_with_src(string $src)
+    {
+        $xpath = new DOMXPATH($this->dom);
+        $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
+
+        $imageObjects = [];
+        foreach($images as $image){
+            $src = $image->getAttribute('src');
+            $alt = $image->getAttribute('alt');
+            $class = $image->getAttribute('class');
+            $contentImage = new Image($src,$alt,'',$class);
+            if($src){
+                array_push($imageObjects, $contentImage);
+            }
+        }
+
+        return $imageObjects;
+    }
+
+    public function set_image_alt(string $src, string $alt): string
+    {
         
         $xpath = new DOMXPATH($this->dom);
         $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
