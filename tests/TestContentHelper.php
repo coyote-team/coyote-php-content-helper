@@ -105,7 +105,7 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt3, 'five');
     }
 
-    public function testChangeElementsWithSameSrc(){
+    public function testChangeElementsAltWithSameSrc(){
         $helper = new ContentHelper("<img src='foo.jpg' alt='three'><img src='foo.jpg' alt='four'><img src='notthere.jpg' alt='five'>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
@@ -123,7 +123,7 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt3, 'five');
     }
 
-    public function testChangingSingleAltWithOneSrc(){
+    public function testAddAltBasedOnSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'>");
 
         $newHtml = $helper->set_image_alt("foo.jpg", "test");
