@@ -159,6 +159,17 @@ class TestContentHelper extends TestCase
         $this->assertEquals($alt3, 'five');
     }
 
+    public function testChangeElementsAltWithNoImageElements(){
+        $helper = new ContentHelper("<html></html>");
+        $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
+        
+        $newText = $helper->set_image_alts($map);
+        $newHelper = new ContentHelper($newText);
+        $images = $newHelper->get_images();
+
+        $this->assertCount(0, $images);
+    }
+
     public function testAddAltBasedOnSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'>");
 
