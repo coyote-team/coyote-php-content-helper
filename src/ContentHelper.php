@@ -34,6 +34,23 @@ class ContentHelper
         return $imageObjects;
     }
 
+    public function set_image_alt(string $src, string $alt): string{
+        
+        $xpath = new DOMXPATH($this->dom);
+        $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
+        
+        if(isset($images)){
+
+            foreach($images as $image){
+                $image->removeAttribute('alt');
+                $image->setAttribute('alt', $alt);
+            }
+
+        }
+
+        $html = $this->dom->saveHTML();
+        return $html;
+    }
 
     /*
         Given a html string, either an entire or partial document, 
