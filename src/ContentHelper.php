@@ -34,6 +34,9 @@ class ContentHelper
         return $imageObjects;
     }
 
+    /*
+       Given a src, return all image elements with the given src 
+    */
     public function get_images_with_src(string $src)
     {
         $xpath = new DOMXPATH($this->dom);
@@ -54,7 +57,11 @@ class ContentHelper
     }
 
     
-
+    /*
+        Given a src string, and an alt string
+        set the alt text equal to the provided alt text
+        for each element with the same src
+    */
     public function set_image_alt(string $src, string $alt): string
     {
         
