@@ -72,8 +72,6 @@ class ContentHelper
     */
     public function set_image_alts($map): string
     {
-        
-        $xpath = new DOMXPath($this->dom);
 
         foreach($map as $src => $alt){
             $this->set_image_alt($src, $alt);
