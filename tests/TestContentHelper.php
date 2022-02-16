@@ -31,36 +31,6 @@ class TestContentHelper extends TestCase
         $this->assertCount(0, $images);
     }
 
-    public function testGetImagesWithCertainSrc(){
-        $helper = new ContentHelper("<img src='foo.jpg'><img src='fo.jpg'><img src='foo.jpg'><img src='foo.jpg'>");
-        $images = $helper->get_images_with_src('foo.jpg');
-        $this->assertCount(3,$images);
-    }
-
-    public function testGetAltAttributeForSrc(){
-        $helper = new ContentHelper("<img src='foo.jpg' alt='test'>");
-        $images = $helper->get_images_with_src('foo.jpg');
-        $this->assertEquals($images[0]->alt, 'test');
-    }
-
-    public function testGetEmptyAltAttributeForSrc(){
-        $helper = new ContentHelper("<img src='foo.jpg'>");
-        $images = $helper->get_images_with_src('foo.jpg');
-        $this->assertEquals($images[0]->alt, '');
-    }
-
-    public function testGetClassAttributeForSrc(){
-        $helper = new ContentHelper("<img src='foo.jpg' class='testing'>");
-        $images = $helper->get_images_with_src('foo.jpg');
-        $this->assertEquals($images[0]->class, 'testing');
-    }
-
-    public function testGetEmptyClassAttributeForSrc(){
-        $helper = new ContentHelper("<img src='foo.jpg'>");
-        $images = $helper->get_images_with_src('foo.jpg');
-        $this->assertEquals($images[0]->class, '');
-    }
-
     public function testGetImagesWithSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
