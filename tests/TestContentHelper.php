@@ -13,6 +13,11 @@ class TestContentHelper extends TestCase
         $this->assertInstanceOf(ContentHelper::class, $helper);
     }
 
+    public function testMalformedHTMLThrowsException(){
+        $this->expectException(\Exception::class);
+        $helper = new ContentHelper("<img ");
+    }
+
     public function testGetImages(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();

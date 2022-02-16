@@ -3,14 +3,22 @@
 declare(strict_types=1);
 use ContentHelper\Image;
 
+
 class ContentHelper
 {
 
     private DOMDocument $dom;
 
     public function __construct(string $html){
+        libxml_use_internal_errors(true);
         $this->dom = new DOMDocument;
         $this->dom->loadHTML($html);
+        /* LoadHTML() doesn't return false on error (It Should), so this conditional checks manually if there are any */
+        if(count(libxml_get_errors()) > 0){
+            libxml_clear_errors();
+            throw new Exception('Malformed HTML');
+        }
+
     }
 
     /*
