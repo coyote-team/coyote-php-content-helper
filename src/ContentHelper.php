@@ -62,23 +62,21 @@ class ContentHelper
         set the alt text equal to the provided alt text
         for each element with the same src
     */
-    public function set_image_alt(string $src, string $alt): string
+    private function set_image_alt(string $src, string $alt): void
     {
         
         $xpath = new DOMXPATH($this->dom);
         $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
         
-        if(isset($images)){
-
-            foreach($images as $image){
-                $image->removeAttribute('alt');
-                $image->setAttribute('alt', $alt);
-            }
-
+        if(is_null($images) || $images === false){
+            return;
         }
 
-        $html = $this->dom->saveHTML();
-        return $html;
+        foreach($images as $image){
+            $image->removeAttribute('alt');
+            $image->setAttribute('alt', $alt);
+        }
+
     }
 
     /*
@@ -92,16 +90,7 @@ class ContentHelper
         $xpath = new DOMXPath($this->dom);
 
         foreach($map as $src => $alt){
-            $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
-            if(is_null($images) || $images === false){
-                continue;
-            }
-            
-            foreach($images as $image){
-                $image->removeAttribute('alt');
-                $image->setAttribute('alt', $alt);
-            }
-
+            $this->set_image_alt($src, $alt);
         }
 
         $html = $this->dom->saveHTML();
