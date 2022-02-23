@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 use ContentHelper\Image;
-
+use IvoPetkov\HTML5DOMDocument;
 
 class ContentHelper
 {
@@ -10,8 +10,7 @@ class ContentHelper
     private DOMDocument $dom;
 
     public function __construct(string $html){
-        libxml_use_internal_errors(true);
-        $this->dom = new DOMDocument;
+        $this->dom = new IvoPetkov\HTML5DOMDocument();
         $this->dom->loadHTML($html);
         /* LoadHTML() doesn't return false on error (It Should), so this conditional checks manually if there are any */
         if(count(libxml_get_errors()) > 0){
