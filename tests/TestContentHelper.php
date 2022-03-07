@@ -13,6 +13,22 @@ class TestContentHelper extends TestCase
         $this->assertInstanceOf(ContentHelper::class, $helper);
     }
 
+    public function testWellFormedHTML(){
+        $wellHTML = "<!DOCTYPE html>\n<html><head><title>Test</title></head><body><img src=\"foo.jpg\"></body></html>";
+        $helper = new ContentHelper($wellHTML);
+        $map = [];
+        $html = $helper->set_image_alts($map);
+        $this->assertEquals($wellHTML, $html);
+    }
+
+    public function testMalformedHTML(){
+        $malHTML = "<img src=\"foo.jpg\"";
+        $helper = new ContentHelper($malHTML);
+        $map = [];
+        $html = $helper->set_image_alts($map);
+        $this->assertStringContainsString("<img src=\"foo.jpg\">", $html);
+    }
+
     public function testLoadSectionInContentHelper(){
         $helper = new ContentHelper("<footer></footer>");
         $this->assertInstanceOf(ContentHelper::class, $helper);
@@ -22,7 +38,6 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->get_images();
         $this->assertCount(1, $images);
-
     }
 
     public function testIgnoreNoSrcImage(){
