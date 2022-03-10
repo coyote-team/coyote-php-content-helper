@@ -160,4 +160,42 @@ class TestContentHelper extends TestCase
         $this->assertCount(0, $images);
     }
 
+    /**
+     * @dataProvider beforeAfterData
+     */
+    public function testParseBeforeAfterContent($expectedResult, $input){
+        $helper = new ContentHelper($input);
+        $images = $helper->get_images();
+
+        $beforeAfterArr = [$images[0]->content_before, $images[0]->content_after];
+
+        $this->assertSame($expectedResult,$beforeAfterArr);
+    }
+
+    private function beforeAfterData(): array
+    {
+        return [
+            [
+                ['',''],
+                '<div><img src="test"></div>',
+            ],
+            [
+                ['before',''],
+                '<div>before<img src="test"></div>',
+            ],
+            [
+                ['','after'],
+                '<div><img src="test">after</div>',
+            ],
+            [
+                ['before','after'],
+                '<div>before<img src="test">after</div>'
+            ],
+            [
+                ['This is extra text before',''],
+                '<div>This is extra text<!-- Comment -->before<img src="test"></div>',
+            ],
+        ];
+    }
+
 }

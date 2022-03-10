@@ -7,6 +7,9 @@ class WordPressImage {
     private readonly string $caption;
     private readonly Image $image;
 
+    const BEFORE_REGEX = '(?:\[caption[^\]]*?\].*?)';
+    const AFTER_REGEX = '(?:(\>.*?)\[\/caption\])';
+
     public function __construct(Image $image, string $caption)
     {
         $this->caption = $caption;

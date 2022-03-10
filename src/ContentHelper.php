@@ -9,6 +9,8 @@ class ContentHelper
 {
 
     private DOMDocument $dom;
+    const LEFT = 0;
+    const RIGHT = 1;
 
     public function __construct(string $html){
         $this->dom = new IvoPetkov\HTML5DOMDocument();
@@ -31,18 +33,40 @@ class ContentHelper
         $imageObjects = [];
         foreach($images as $image){
             $src = $image->getAttribute('src');
+            if(!$src){
+                continue;
+            }
             $alt = $image->getAttribute('alt');
             $class = $image->getAttribute('class');
-            $contentImage = new Image($src,$alt,'',$class);
-            if($src){
-                array_push($imageObjects, $contentImage);
-            }
+            $content_before = $this->findTextContent($image->previousSibling, '', self::LEFT);
+            $content_after = $this->findTextContent($image->nextSibling, '', self::RIGHT);
+            $contentImage = new Image($src,$alt,$class, $content_before, $content_after);
+            array_push($imageObjects, $contentImage);
         }
 
         return $imageObjects;
     }
 
-    
+    private function findTextContent(?DOMNode $node, string $textContent, int $direction): string
+    {
+        if(is_null($node)){
+            return trim($textContent);
+        }
+
+        if($node->nodeType === XML_ELEMENT_NODE){
+            return trim($textContent);
+        }
+        
+        $nextNode = $direction === self::LEFT ? $node->previousSibling : $node->nextSibling;
+
+        if($node->nodeType === XML_TEXT_NODE){
+            $textContent = join(' ', $direction === self::LEFT ? [$node->nodeValue, $textContent] : [$textContent, $node->nodeValue]);
+        }
+
+        return $this->findTextContent($nextNode, $textContent, $direction);
+
+    }
+
     /*
         Given a src string, and an alt string
         set the alt text equal to the provided alt text
@@ -80,7 +104,7 @@ class ContentHelper
         $html = $this->dom->saveHTML();
 
         return $html;
-        
+
         
     }
 
