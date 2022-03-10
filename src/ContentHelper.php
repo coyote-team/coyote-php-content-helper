@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 use ContentHelper\Image;
+use ContentHelper\WordPressImage;
 use IvoPetkov\HTML5DOMDocument;
 
 class ContentHelper
@@ -82,7 +83,5 @@ class ContentHelper
         
         
     }
-
-
 
 }
