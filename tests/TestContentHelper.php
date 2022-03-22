@@ -195,6 +195,10 @@ class TestContentHelper extends TestCase
                 ['This is extra text before',''],
                 '<div>This is extra text<!-- Comment -->before<img src="test"></div>',
             ],
+            [
+                ['[caption]', 'This is a test caption[/caption]'],
+                '<div>[caption]<img src="test">This is a test caption[/caption]</div>',
+            ],
         ];
     }
 

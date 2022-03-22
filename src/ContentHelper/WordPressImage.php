@@ -4,16 +4,21 @@ namespace ContentHelper;
 use ContentHelper\Image;
 
 class WordPressImage {
-    private readonly string $caption;
-    private readonly Image $image;
+    private string $caption;
+    private Image $image;
 
-    const BEFORE_REGEX = '(?:\[caption[^\]]*?\].*?)';
-    const AFTER_REGEX = '(?:(\>.*?)\[\/caption\])';
+    const AFTER_REGEX = '/([^>]*?)(?=\[\/caption])/smi';
 
-    public function __construct(Image $image, string $caption)
+    public function __construct(Image $image)
     {
-        $this->caption = $caption;
+        $matches = array();
         $this->image = $image;
+        $this->caption = '';
+
+        if(preg_match(self::AFTER_REGEX, $image->content_after, $matches) === 1){
+            $this->caption = $matches[0];
+        }
+
     }
 
     public function getSrc(): string
@@ -23,7 +28,7 @@ class WordPressImage {
 
     public function getCaption(): string 
     {
-        return $this->$caption;
+        return $this->caption;
     }
 
     public function getAlt(): string 
@@ -35,5 +40,4 @@ class WordPressImage {
     {
         return $this->image->class;
     }
-
 }
