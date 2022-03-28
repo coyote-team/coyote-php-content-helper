@@ -17,7 +17,7 @@ class TestContentHelper extends TestCase
         $wellHTML = "<!DOCTYPE html>\n<html><head><title>Test</title></head><body><img src=\"foo.jpg\"></body></html>";
         $helper = new ContentHelper($wellHTML);
         $map = [];
-        $html = $helper->set_image_alts($map);
+        $html = $helper->setImageAlts($map);
         $this->assertEquals($wellHTML, $html);
     }
 
@@ -25,7 +25,7 @@ class TestContentHelper extends TestCase
         $malHTML = "<img src=\"foo.jpg\"";
         $helper = new ContentHelper($malHTML);
         $map = [];
-        $html = $helper->set_image_alts($map);
+        $html = $helper->setImageAlts($map);
         $this->assertStringContainsString("<img src=\"foo.jpg\">", $html);
     }
 
@@ -36,32 +36,32 @@ class TestContentHelper extends TestCase
 
     public function testGetImages(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
-        $images = $helper->get_images();
+        $images = $helper->getImages();
         $this->assertCount(1, $images);
     }
 
     public function testIgnoreNoSrcImage(){
         $helper = new ContentHelper("<img>");
-        $images = $helper->get_images();
+        $images = $helper->getImages();
         $this->assertCount(0, $images);
     }
 
     public function testGetImagesWithSrc(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
-        $images = $helper->get_images();
+        $images = $helper->getImages();
         $src = $images[0]->src;
         $this->assertEquals($src, 'foo.jpg');
     }
 
     public function testNoImagesAtAll(){
         $helper = new ContentHelper("<html></html>");
-        $images = $helper->get_images();
+        $images = $helper->getImages();
         $this->assertCount(0, $images);
     }
 
     public function testReturnsImageInstanceArray(){
         $helper = new ContentHelper("<img src='foo.jpg'>");
-        $images = $helper->get_images();
+        $images = $helper->getImages();
         $this->assertInstanceOf(ContentHelper\Image::class, array_pop($images));
     }
 
@@ -69,10 +69,10 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img src='notthere.jpg'>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
         
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
         
         $alt1 = $images[0]->alt;
         $alt2 = $images[1]->alt;
@@ -87,10 +87,10 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg' alt='two'><img src='notthere.jpg'>");
         $map = [];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
         
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
         
         $alt1 = $images[0]->alt;
         $alt2 = $images[1]->alt;
@@ -105,10 +105,10 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $map = ['fo.jpg' => 'one', 'bo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
         
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
         
         $this->assertCount(1, $images);
     }
@@ -117,10 +117,10 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg' alt='three'><img src='boo.jpg' alt='four'><img src='notthere.jpg' alt='five'>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
         
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
         
         $alt1 = $images[0]->alt;
         $alt2 = $images[1]->alt;
@@ -135,10 +135,10 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg' alt='three'><img src='foo.jpg' alt='four'><img src='notthere.jpg' alt='five'>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
         
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
         
         $alt1 = $images[0]->alt;
         $alt2 = $images[1]->alt;
@@ -153,9 +153,9 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<html></html>");
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
         
-        $newText = $helper->set_image_alts($map);
+        $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
-        $images = $newHelper->get_images();
+        $images = $newHelper->getImages();
 
         $this->assertCount(0, $images);
     }
@@ -165,7 +165,7 @@ class TestContentHelper extends TestCase
      */
     public function testParseBeforeAfterContent($expectedResult, $input){
         $helper = new ContentHelper($input);
-        $images = $helper->get_images();
+        $images = $helper->getImages();
 
         $beforeAfterArr = [$images[0]->content_before, $images[0]->content_after];
 
