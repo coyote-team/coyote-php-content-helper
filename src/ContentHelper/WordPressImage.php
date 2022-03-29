@@ -7,19 +7,27 @@ use ContentHelper\Image;
 class WordPressImage
 {
     private string $caption;
+    private string $wordPressAttachmentUrl;
     private Image $image;
 
     private const AFTER_REGEX = '/([^>]*?)(?=\[\/caption])/smi';
+    private const IMG_ATTACHMENT_REGEX = '/wp-image-(\d+)/smi';
 
     public function __construct(Image $image)
     {
         $matches = array();
         $this->image = $image;
         $this->caption = '';
+        $this->wordPressAttachmentUrl = '';
 
         if (preg_match(self::AFTER_REGEX, $image->content_after, $matches) === 1) {
             $this->caption = $matches[0];
         }
+
+        if (preg_match(self::IMG_ATTACHMENT_REGEX, $image->class, $matches) === 1) {
+            $this->wordPressAttachmentUrl = $matches[0];
+        }
+
     }
 
     public function getSrc(): string
@@ -40,5 +48,10 @@ class WordPressImage
     public function getClass(): string
     {
         return $this->image->class;
+    }
+
+    public function getWordPressAttachmentUrl(): string
+    {
+        return $this->wordPressAttachmentUrl;
     }
 }
