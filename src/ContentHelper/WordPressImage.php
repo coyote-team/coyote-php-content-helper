@@ -26,12 +26,11 @@ class WordPressImage
 
         if (preg_match(self::IMG_ATTACHMENT_REGEX, $image->class, $matches) === 1) {
             $attachment_url = wp_get_attachment_url(intval($matches[1]));
-            
-            if($attachment_url !== false){
+
+            if ($attachment_url !== false) {
                 $this->wordPressAttachmentUrl = $attachment_url;
             }
         }
-
     }
 
     public function getSrc(): string
