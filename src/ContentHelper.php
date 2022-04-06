@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-use ContentHelper\Image;
-use ContentHelper\WordPressImage;
+namespace Coyote;
+
+use Coyote\ContentHelper\Image;
 use IvoPetkov\HTML5DOMDocument;
 
 class ContentHelper
 {
-    private DOMDocument $dom;
+    private \IvoPetkov\HTML5DOMDocument $dom;
     private const LEFT = 0;
     private const RIGHT = 1;
 
     public function __construct(string $html)
     {
-        $this->dom = new IvoPetkov\HTML5DOMDocument();
+        $this->dom = new \IvoPetkov\HTML5DOMDocument();
         $this->dom->loadHTML($html);
         /* LoadHTML() doesn't return false on error (It Should),
             so this conditional checks manually if there are any */
@@ -49,7 +50,7 @@ class ContentHelper
         return $imageObjects;
     }
 
-    private function findTextContent(?DOMNode $node, string $textContent, int $direction): string
+    private function findTextContent(?\DOMNode $node, string $textContent, int $direction): string
     {
         if (is_null($node)) {
             return trim($textContent);
@@ -77,7 +78,7 @@ class ContentHelper
     private function setImageAlt(string $src, string $alt): void
     {
 
-        $xpath = new DOMXPATH($this->dom);
+        $xpath = new \DOMXPATH($this->dom);
         $images = $xpath->evaluate("//img[@src=\"{$src}\"]");
 
         if (is_null($images) || $images === false) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace ContentHelper;
+namespace Coyote\ContentHelper;
 
 class Image
 {

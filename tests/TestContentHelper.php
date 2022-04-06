@@ -4,6 +4,7 @@ declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
 require_once('vendor/autoload.php');
 
+use Coyote\ContentHelper;
 
 class TestContentHelper extends TestCase
 {
