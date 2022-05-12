@@ -24,6 +24,7 @@ class Image
         $this->content_after = $content_after;
     }
 
+
     /**
      * @return string
      */
