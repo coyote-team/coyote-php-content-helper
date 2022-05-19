@@ -13,10 +13,10 @@ class Image
 
     public function __construct(
         string $src,
-        string $alt,
-        string $class,
-        string $contentBefore = '',
-        string $contentAfter = '',
+        string $alt = '',
+        ?string $class = null,
+        string $contentBefore = null,
+        string $contentAfter = null,
         string $figureCaption = null
     ) {
         $this->src = $src;
@@ -37,7 +37,7 @@ class Image
         return $this->class;
     }
 
-    public function getAlt(): ?string
+    public function getAlt(): string
     {
         return $this->alt;
     }
