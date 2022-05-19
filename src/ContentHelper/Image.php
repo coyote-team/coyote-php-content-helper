@@ -13,7 +13,7 @@ class Image
 
     public function __construct(
         string $src,
-        string $alt = '',
+        string $alt = null,
         ?string $class = null,
         string $contentBefore = null,
         string $contentAfter = null,
@@ -37,8 +37,16 @@ class Image
         return $this->class;
     }
 
-    public function getAlt(): string
+    public function getAlt(): ?string
     {
+        if (is_null($this->alt)) {
+            return null;
+        }
+
+        if (strlen(trim($this->alt)) === 0) {
+            return null;
+        }
+
         return $this->alt;
     }
 

@@ -61,7 +61,7 @@ class TestContentHelper extends TestCase
         $helper = new ContentHelper("<img src='foo.jpg'>");
         $images = $helper->getImages();
         $src = $images[0]->getSrc();
-        $this->assertEquals($src, 'foo.jpg');
+        $this->assertEquals('foo.jpg', $src);
     }
 
     public function testNoImagesAtAll()
@@ -94,7 +94,7 @@ class TestContentHelper extends TestCase
 
         $this->assertEquals('one', $alt1);
         $this->assertEquals('two', $alt2);
-        $this->assertEquals('', $alt3);
+        $this->assertNull($alt3);
     }
 
     public function testSetAltWithEmptyMap()
@@ -111,9 +111,9 @@ class TestContentHelper extends TestCase
         $alt2 = $images[1]->getAlt();
         $alt3 = $images[2]->getAlt();
 
-        $this->assertEquals('', $alt1);
+        $this->assertNull($alt1);
         $this->assertEquals('two', $alt2);
-        $this->assertEquals('', $alt3);
+        $this->assertNull($alt3);
     }
 
     public function testNoSrcInHTMLMatchingMapSrc()
@@ -143,15 +143,16 @@ class TestContentHelper extends TestCase
         $alt2 = $images[1]->getAlt();
         $alt3 = $images[2]->getAlt();
 
-        $this->assertEquals($alt1, 'one');
-        $this->assertEquals($alt2, 'two');
-        $this->assertEquals($alt3, 'five');
+        $this->assertEquals('one', $alt1);
+        $this->assertEquals('two', $alt2);
+        $this->assertEquals('five', $alt3);
     }
 
     public function testChangeElementsAltWithSameSrc()
     {
         $helper = new ContentHelper(
-            "<img src='foo.jpg' alt='three'><img src='foo.jpg' alt='four'><img src='notthere.jpg' alt='five'>");
+            "<img src='foo.jpg' alt='three'><img src='foo.jpg' alt='four'><img src='notthere.jpg' alt='five'>"
+        );
         $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
 
         $newText = $helper->setImageAlts($map);
