@@ -27,41 +27,26 @@ class Image
         $this->figureCaption = $figureCaption;
     }
 
-    /**
-     * @return string
-     */
     public function getSrc(): string
     {
         return $this->src;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClass(): ?string
     {
         return $this->class;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAlt(): ?string
     {
         return $this->alt;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentBefore(): ?string
     {
         return $this->content_before;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentAfter(): ?string
     {
         return $this->content_after;
