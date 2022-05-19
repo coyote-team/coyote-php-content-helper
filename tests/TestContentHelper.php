@@ -209,13 +209,21 @@ class TestContentHelper extends TestCase
 
     private function figureCaptionData(): array
     {
+        $figureWithFigCaption = <<<FIGURE
+        <figure>
+<figcaption>This is a captioned image.</figcaption>
+<img src="some-src" alt="some-alt">
+</figure>
+FIGURE;
+
         $noCaptionCase = [null, '<div><img src="test"></div>'];
         $captionCase = ['some-caption', '<figure><img src="test"><figcaption>some-caption</figcaption></figure>'];
+        $captionCase2 = ['This is a captioned image.', $figureWithFigCaption];
         $noFigureCase = [null, '<img src="test"><figcaption>some-caption</figcaption>'];
         $noFigCaptionCase = [null, '<figure><img src="test"></figure>'];
         $emptyFigCaptionCase = ['', '<figure><img src="test"><figcaption></figcaption></figure>'];
 
-        return [$noCaptionCase, $captionCase, $noFigureCase, $noFigCaptionCase, $emptyFigCaptionCase];
+        return [$noCaptionCase, $captionCase, $captionCase2, $noFigureCase, $noFigCaptionCase, $emptyFigCaptionCase];
     }
 
     private function beforeAfterData(): array

@@ -55,24 +55,29 @@ class ContentHelper
         return $imageObjects;
     }
 
-    private function getFigureCaption(\DOMNode $image): ?string
+    private function getFigureCaption(\DOMNode $node, bool $recursing = false): ?string
     {
-        $parent = $image->parentNode;
+        if (!$recursing) {
+            $parent = $node->parentNode;
 
-        if (strtolower($parent->nodeName) !== 'figure') {
+            if (strtolower($parent->nodeName) !== 'figure') {
+                return null;
+            }
+
+            $node = $parent->firstChild;
+        }
+
+        if (strtolower($node->nodeName) === 'figcaption') {
+            return $node->nodeValue;
+        }
+
+        $next = $node->nextSibling;
+
+        if (is_null($next)) {
             return null;
         }
 
-        $nextSibling = $image->nextSibling;
-        if (is_null($nextSibling)) {
-            return null;
-        }
-
-        if (strtolower($nextSibling->nodeName) !== 'figcaption') {
-            return null;
-        }
-
-        return $nextSibling->nodeValue;
+        return $this->getFigureCaption($next, true);
     }
 
     private function findTextContent(?\DOMNode $node, string $textContent, int $direction): string
