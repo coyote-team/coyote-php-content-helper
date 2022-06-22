@@ -7,61 +7,61 @@ class Image
     private string $src;
     private ?string $alt;
     private ?string $class;
-    private ?string $content_before;
-    private ?string $content_after;
+    private ?string $contentBefore;
+    private ?string $contentAfter;
+    private ?string $figureCaption;
 
     public function __construct(
         string $src,
-        string $alt,
-        string $class,
-        string $content_before = '',
-        string $content_after = ''
+        string $alt = null,
+        ?string $class = null,
+        string $contentBefore = null,
+        string $contentAfter = null,
+        string $figureCaption = null
     ) {
         $this->src = $src;
         $this->alt = $alt;
         $this->class = $class;
-        $this->content_before = $content_before;
-        $this->content_after = $content_after;
+        $this->contentBefore = $contentBefore;
+        $this->contentAfter = $contentAfter;
+        $this->figureCaption = $figureCaption;
     }
 
-
-    /**
-     * @return string
-     */
     public function getSrc(): string
     {
         return $this->src;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClass(): ?string
     {
         return $this->class;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAlt(): ?string
     {
+        if (is_null($this->alt)) {
+            return null;
+        }
+
+        if (strlen(trim($this->alt)) === 0) {
+            return null;
+        }
+
         return $this->alt;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentBefore(): ?string
     {
-        return $this->content_before;
+        return $this->contentBefore;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentAfter(): ?string
     {
-        return $this->content_after;
+        return $this->contentAfter;
+    }
+
+    public function getFigureCaption(): ?string
+    {
+        return $this->figureCaption;
     }
 }

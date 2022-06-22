@@ -25,29 +25,59 @@ class ContentHelper
         }
     }
 
-    /*
+    /**
+     * @return Image[]
         Given a html string, either an entire or partial document, return all image elements
         (these can be DOMElement instances)
     */
-    public function getImages()
+    public function getImages(): array
     {
 
         $images = $this->dom->getElementsByTagName('img');
         $imageObjects = [];
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
+
             if (!$src) {
                 continue;
             }
+
             $alt = $image->getAttribute('alt');
             $class = $image->getAttribute('class');
-            $content_before = $this->findTextContent($image->previousSibling, '', self::LEFT);
-            $content_after = $this->findTextContent($image->nextSibling, '', self::RIGHT);
-            $contentImage = new Image($src, $alt, $class, $content_before, $content_after);
+            $contentBefore = $this->findTextContent($image->previousSibling, '', self::LEFT);
+            $contentAfter = $this->findTextContent($image->nextSibling, '', self::RIGHT);
+            $figureCaption = $this->getFigureCaption($image);
+
+            $contentImage = new Image($src, $alt, $class, $contentBefore, $contentAfter, $figureCaption);
             array_push($imageObjects, $contentImage);
         }
 
         return $imageObjects;
+    }
+
+    private function getFigureCaption(\DOMNode $node, bool $recursing = false): ?string
+    {
+        if (!$recursing) {
+            $parent = $node->parentNode;
+
+            if (strtolower($parent->nodeName) !== 'figure') {
+                return null;
+            }
+
+            $node = $parent->firstChild;
+        }
+
+        if (strtolower($node->nodeName) === 'figcaption') {
+            return $node->nodeValue;
+        }
+
+        $next = $node->nextSibling;
+
+        if (is_null($next)) {
+            return null;
+        }
+
+        return $this->getFigureCaption($next, true);
     }
 
     private function findTextContent(?\DOMNode $node, string $textContent, int $direction): string
@@ -98,13 +128,10 @@ class ContentHelper
     */
     public function setImageAlts($map): string
     {
-
         foreach ($map as $src => $alt) {
             $this->setImageAlt($src, $alt);
         }
 
-        $html = $this->dom->saveHTML();
-
-        return $html;
+        return $this->dom->saveHTML();
     }
 }
