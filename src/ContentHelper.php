@@ -13,16 +13,13 @@ class ContentHelper
     private const LEFT = 0;
     private const RIGHT = 1;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct(string $html)
     {
         $this->dom = new \IvoPetkov\HTML5DOMDocument();
-        $this->dom->loadHTML($html);
-        /* LoadHTML() doesn't return false on error (It Should),
-            so this conditional checks manually if there are any */
-        if (count(libxml_get_errors()) > 0) {
-            libxml_clear_errors();
-            throw new Exception('Malformed HTML');
-        }
+        $this->dom->loadHTML($html, HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
     }
 
     /**
