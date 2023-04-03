@@ -80,8 +80,8 @@ class TestContentHelper extends TestCase
 
     public function testSetAltWithMap()
     {
-        $helper = new ContentHelper("<img src='foo.jpg'><img src='boo.jpg'><img src='notthere.jpg'>");
-        $map = ['foo.jpg' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
+        $helper = new ContentHelper("<img src='https://images.unsplash.com/photo-1653989830251-5455245ae4e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1227&q=80'><img src='boo.jpg'><img src='notthere.jpg'>");
+        $map = ['https://images.unsplash.com/photo-1653989830251-5455245ae4e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1227&q=80' => 'one', 'boo.jpg' => 'two', 'fail.jpg' => 'shouldnt work'];
 
         $newText = $helper->setImageAlts($map);
         $newHelper = new ContentHelper($newText);
@@ -254,5 +254,47 @@ FIGURE;
                 '<div>[caption]<img src="test">This is a test caption[/caption]</div>',
             ],
         ];
+    }
+
+    /**
+     * @dataProvider complexUrlData
+     */
+    public function testComplexUrls($expectedResult, $input)
+    {
+        $helper = new ContentHelper($input);
+        $images = $helper->getImages();
+
+        $this->assertEquals($expectedResult, $images[0]->getSrc());
+    }
+
+    private function complexUrlData(): array
+    {
+        return [
+            [
+                'https://images.unsplash.com/photo-1653989830251-5455245ae4e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1227&q=80',
+                '<div><img src="https://images.unsplash.com/photo-1653989830251-5455245ae4e9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1227&q=80"></div>'
+            ]
+        ];
+    }
+
+    private function srcFilterData(): array
+    {
+        return [
+            [1, '<img src="https://example.org/foo.png">', null],
+            [1, '<img src="https://example.org/foo.png">', function ($src):bool { return preg_match('/^https?:\/\//', $src) === 1; }],
+            [0, '<img src="//example.org/foo.png">', function ($src):bool { return preg_match('/^https?:\/\//', $src) === 1; }],
+            [1, '<img src="//example.org/foo.png">', function ($src):bool { return preg_match('/^\/\//', $src) === 1; }],
+            [0, '<img src="../foo.png">', function ($src):bool { return preg_match('/^\/\//', $src) === 1; }],
+        ];
+    }
+
+    /**
+     * @dataProvider srcFilterData
+     */
+    public function testGetImagesWithSrcFilter($expectedResult, $input, $filter)
+    {
+        $helper = new ContentHelper($input);
+        $images = $helper->getImages($filter);
+        $this->assertCount($expectedResult, $images);
     }
 }

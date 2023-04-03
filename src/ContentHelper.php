@@ -23,19 +23,24 @@ class ContentHelper
     }
 
     /**
+     * @param callable|null $srcFilter optional (string) => bool filter for the src attribute
+     *
      * @return Image[]
-        Given a html string, either an entire or partial document, return all image elements
-        (these can be DOMElement instances)
+        * Given a html string, either an entire or partial document, return all image elements
+        * (these can be DOMElement instances)
     */
-    public function getImages(): array
+    public function getImages(?callable $srcFilter = null): array
     {
-
         $images = $this->dom->getElementsByTagName('img');
         $imageObjects = [];
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
 
             if (!$src) {
+                continue;
+            }
+
+            if (!is_null($srcFilter) && !$srcFilter($src)) {
                 continue;
             }
 
